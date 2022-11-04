@@ -181,6 +181,7 @@ onMounted(() => {
         transform: translateX(101%);
     }
 }
+
 .home-container-box {
     width: 100%;
     height: 100%;
