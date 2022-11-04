@@ -21,7 +21,7 @@ const toPagesRouter = (routerInput) => {
                     </p>
                 </div>
                 <div>
-                    <p>(주)팬딩 / 대표이사: 엄세현</p>
+                    <p>(주)팬딩 / 대표이사: 앤트</p>
                     <p>사업자등록번호: 111-11-11111</p>
                 </div>
             </div>

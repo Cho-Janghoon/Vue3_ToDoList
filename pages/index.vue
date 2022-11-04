@@ -32,13 +32,13 @@ watch(toDoList, async (newQuestion, oldQuestion) => {
         addToDoListDataState.value = true;
         setTimeout(() => {
             addToDoListDataState.value = false;
-        }, 2000);
+        }, 3000);
     } else if (toDoList.length < 10) {
         console.log("바뀜");
         deleteToDoListDataState.value = true;
         setTimeout(() => {
             deleteToDoListDataState.value = false;
-        }, 2000);
+        }, 3000);
     }
 });
 
@@ -57,13 +57,25 @@ onMounted(() => {
 
 <template>
     <div class="home-container-box">
-        <div class="header-alert" v-if="addToDoListDataState">
+        <div
+            class="header-alert"
+            :class="{ modalAni: addToDoListDataState }"
+            v-if="addToDoListDataState"
+        >
             <v-alert type="success">TODOLIST가 추가 되었습니다.</v-alert>
         </div>
-        <div class="header-alert" v-if="deleteToDoListDataState">
+        <div
+            class="header-alert"
+            :class="{ modalAni: deleteToDoListDataState }"
+            v-if="deleteToDoListDataState"
+        >
             <v-alert type="error">TODOLIST가 삭제 되었습니다.</v-alert>
         </div>
-        <div class="header-alert" v-if="searchKewordState">
+        <div
+            class="header-alert"
+            :class="{ modalAni: searchKewordState }"
+            v-if="searchKewordState"
+        >
             <v-alert type="warning">키워드가 존재하지 않습니다.</v-alert>
         </div>
         <div class="home-container-title">
@@ -72,8 +84,9 @@ onMounted(() => {
                 <Icon name="quill:search" style="width: 24px; height: 24px" />
                 <input
                     type="text"
+                    onfocus="this.placeholder = ''"
                     @keyup.enter="searchToDo"
-                    placeholder="키워드를 입력하세요"
+                    placeholder="키워드를 입력해주세요:)"
                 />
             </div>
         </div>
@@ -147,13 +160,26 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24%;
+    width: 312px;
     font-family: "NanumBarunGothic";
     font-weight: 600;
     font-size: 14px;
     position: absolute;
     top: 4%;
-    left: 2px;
+    left: -312px;
+}
+
+.modalAni {
+    animation: translateX 0.8s forwards;
+}
+
+@keyframes translateX {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(101%);
+    }
 }
 .home-container-box {
     width: 100%;
@@ -182,11 +208,13 @@ onMounted(() => {
 }
 
 .home-container-search > input {
+    text-align: center;
     outline: none;
-    border-radius: 8px;
-    border: 1px solid rgb(165, 165, 165);
+    border-radius: 24px;
+    border: 0;
     margin-left: 8px;
-    height: 20px;
+    height: 24px;
+    background-color: rgb(226, 226, 226);
 }
 
 .home-container {

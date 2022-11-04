@@ -38,7 +38,12 @@ const addToDo = () => {
             <div>ADD TO DO</div>
             <div class="modal-content-add">
                 <div class="modal-content-contents">
-                    <input type="text" v-model="inputValue" />
+                    <input
+                        type="text"
+                        onfocus="this.placeholder = ''"
+                        v-model="inputValue"
+                        placeholder="할 일을 입력해주세요:)"
+                    />
                 </div>
             </div>
             <div style="font-size: 28px; cursor: pointer" @click="addToDo">
@@ -69,7 +74,7 @@ const addToDo = () => {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 24px;
+    padding: 24px 0px;
     width: 424px;
     height: 312px;
     background-color: #ffffff;
@@ -78,7 +83,7 @@ const addToDo = () => {
     z-index: 1;
     opacity: 1;
     font-family: "NanumBarunGothic";
-    font-weight: 600;
+    font-weight: 800;
     font-size: 28px;
     color: rgb(105, 121, 248);
 }
@@ -107,10 +112,12 @@ const addToDo = () => {
 }
 
 .modal-content-contents > input {
+    text-align: center;
     outline: none;
-    border: 1px solid rgb(165, 165, 165);
-    border-radius: 8px;
+    border: 0;
+    background-color: rgb(226, 226, 226);
+    border-radius: 32px;
     width: 58%;
-    height: 24px;
+    height: 32px;
 }
 </style>
