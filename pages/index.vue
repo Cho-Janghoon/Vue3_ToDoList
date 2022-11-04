@@ -1,59 +1,194 @@
 <script lang="ts" setup>
-const toDoList = reactive([
-    { do: "read vue docs", date: "2022-10-28" },
-    { do: "fanding web tour", date: "2022-10-29" },
-    { do: "ready holloween costume", date: "2022-10-30" },
-    { do: "read welcome docs", date: "2022-10-31" },
-    { do: "weekly quest", date: "2022-11-01" },
-    { do: "first project", date: "2022-11-02" },
-    { do: "second project", date: "2022-11-03" },
-    { do: "third project", date: "2022-11-04" },
-    { do: "go trip", date: "2022-11-05" },
-    { do: "study vue", date: "2022-11-06" },
-]);
+import { useStore } from "~/stores/store";
+const store = useStore();
+const toDoList = store.toDoList;
+const searchTodoList = store.searchTodoList;
 
-const checkList = ref(true);
-const changeCheckRef = () => {
-    checkList.value = !checkList.value;
+const addToDoListDataState = ref<boolean>(false);
+const deleteToDoListDataState = ref<boolean>(false);
+const searchKewordState = ref<boolean>(false);
+
+const changeTodoListCheck = (idx: number) => {
+    toDoList[idx].check = !toDoList[idx].check;
+    store.addDoneToDoList(idx);
 };
 
-// const { data, pending, error } = useAsyncData(() => {
-//   return getData();
-// });
+const searchToDo = (e) => {
+    store.searchKeyword(e);
+    if (searchTodoList.length === 0) {
+        searchKewordState.value = true;
+        setTimeout(() => {
+            searchKewordState.value = false;
+        }, 2000);
+    } else searchKewordState.value = false;
+};
 
-// onUnmounted(() => {
-//   console.log("unmounted");
-// });
+const deleteToDo = (idx) => {
+    store.deleteToDoList(idx);
+};
 
-// onMounted(() => {
-//   console.log("mounted");
-// });
+watch(toDoList, async (newQuestion, oldQuestion) => {
+    if (toDoList.length > 10) {
+        addToDoListDataState.value = true;
+        setTimeout(() => {
+            addToDoListDataState.value = false;
+        }, 2000);
+    } else if (toDoList.length < 10) {
+        console.log("바뀜");
+        deleteToDoListDataState.value = true;
+        setTimeout(() => {
+            deleteToDoListDataState.value = false;
+        }, 2000);
+    }
+});
+
+onUpdated(() => {
+    console.log("updated");
+});
+
+onUnmounted(() => {
+    console.log("unmounted");
+});
+
+onMounted(() => {
+    console.log("mounted");
+});
 </script>
 
 <template>
-    <div class="home-container">
-        <div class="home-content-box" v-for="(el, idx) in toDoList">
-            <div class="home-content-title">
-                <div>{{ idx }}.</div>
-                <div>{{ el.do }}</div>
-            </div>
-            <div class="home-content-check" @click="changeCheckRef">
-                <img
-                    v-if="checkList"
-                    class="home-content-check-img"
-                    src="~/assets/images/check.png"
+    <div class="home-container-box">
+        <div class="header-alert" v-if="addToDoListDataState">
+            <v-alert type="success">TODOLIST가 추가 되었습니다.</v-alert>
+        </div>
+        <div class="header-alert" v-if="deleteToDoListDataState">
+            <v-alert type="error">TODOLIST가 삭제 되었습니다.</v-alert>
+        </div>
+        <div class="header-alert" v-if="searchKewordState">
+            <v-alert type="warning">키워드가 존재하지 않습니다.</v-alert>
+        </div>
+        <div class="home-container-title">
+            <p>To Do List</p>
+            <div class="home-container-search">
+                <Icon name="quill:search" style="width: 24px; height: 24px" />
+                <input
+                    type="text"
+                    @keyup.enter="searchToDo"
+                    placeholder="키워드를 입력하세요"
                 />
-                <img
-                    v-else
-                    class="home-content-check-img"
-                    src="~/assets/images/vue_logo.png"
-                />
             </div>
+        </div>
+        <div class="home-container">
+            <template v-if="searchTodoList.length === 0">
+                <div v-for="(el, idx) in toDoList" class="home-content-box">
+                    <div class="home-content-title">
+                        <div
+                            style="color: rgb(105, 121, 248); margin-right: 8px"
+                        >
+                            {{ idx }}.
+                        </div>
+                        <div style="margin-right: 8px">{{ el.do }}</div>
+                        <div style="font-size: 8px">{{ el.date }}</div>
+                        <div
+                            style="cursor: pointer; margin-left: 12px"
+                            @click="deleteToDo(idx)"
+                        >
+                            <Icon name="ep:delete" />
+                        </div>
+                    </div>
+                    <div
+                        class="home-content-check"
+                        @click="changeTodoListCheck(idx)"
+                    >
+                        <img
+                            v-if="toDoList[idx].check"
+                            class="home-content-check-img"
+                            src="~/assets/images/check.png"
+                        />
+                        <div style="cursor: pointer" v-else>
+                            <Icon name="quill:checkmark" />
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template v-else-if="searchTodoList.length > 0">
+                <div
+                    v-for="(el, idx) in searchTodoList"
+                    class="home-content-box"
+                >
+                    <div class="home-content-title">
+                        <div
+                            style="color: rgb(105, 121, 248); margin-right: 8px"
+                        >
+                            {{ idx }}.
+                        </div>
+                        <div>{{ el.do }}</div>
+                    </div>
+                    <div
+                        class="home-content-check"
+                        @click="changeTodoListCheck(idx)"
+                    >
+                        <img
+                            v-if="toDoList[idx].check"
+                            class="home-content-check-img"
+                            src="~/assets/images/check.png"
+                        />
+                        <div style="cursor: pointer" v-else>
+                            <Icon name="quill:checkmark" />
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.header-alert {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24%;
+    font-family: "NanumBarunGothic";
+    font-weight: 600;
+    font-size: 14px;
+    position: absolute;
+    top: 4%;
+    left: 2px;
+}
+.home-container-box {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 4%;
+}
+.home-container-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 148px;
+    font-size: 48px;
+    font-family: "NanumBarunGothic";
+    font-weight: 600;
+    color: rgb(105, 121, 248);
+    padding-top: 2%;
+}
+.home-container-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24%;
+    height: 100%;
+}
+
+.home-container-search > input {
+    outline: none;
+    border-radius: 8px;
+    border: 1px solid rgb(165, 165, 165);
+    margin-left: 8px;
+    height: 20px;
+}
+
 .home-container {
     display: flex;
     flex-direction: column;
@@ -61,16 +196,22 @@ const changeCheckRef = () => {
     align-items: center;
     width: 100%;
     height: 100%;
-    padding-top: 8%;
+    padding-top: 4%;
 }
 .home-content-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 80%;
+    width: 50%;
     height: 24px;
-    border-bottom: solid 1px rgb(105, 121, 248);
     padding: 12px;
+    font-family: "NanumBarunGothic";
+    font-weight: 600;
+}
+.home-content-box:hover {
+    background-color: rgb(165, 165, 165, 0.2);
+    border: 0px;
+    border-radius: 18px;
 }
 .home-content-title {
     display: flex;
@@ -78,6 +219,7 @@ const changeCheckRef = () => {
     align-items: center;
 }
 .home-content-check {
+    display: flex;
     width: 24px;
     height: 24px;
     text-align: center;

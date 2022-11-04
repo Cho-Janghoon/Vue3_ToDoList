@@ -1,9 +1,34 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const openModal = ref<boolean>(false);
+const handleModal = (): void => {
+    openModal.value = !openModal.value;
+};
+
+provide("open-modal", { openModal, handleModal });
+
+const router = useRouter();
+const goHome = () => {
+    router.push({ path: "/" });
+};
+</script>
 
 <template>
+    <Modal />
     <div class="header-container">
         <div class="header-logo-box">
-            <img class="header-logo-img" src="../assets/images/vue_logo.png" />
+            <div
+                @click="goHome"
+                style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                "
+            >
+                <img
+                    class="header-logo-img"
+                    src="../assets/images/vue_logo.png"
+                />
+            </div>
         </div>
         <div class="header-tab-box">
             <NuxtLink to="/current-todolist" class="nuxt-link"
@@ -11,9 +36,12 @@
             >
             <NuxtLink to="/done-todolist" class="nuxt-link">완료된 일</NuxtLink>
         </div>
-        <div class="header-search-box">
-            <img class="header-search-img" src="../assets/images/search.png" />
-            <input type="text" />
+        <div class="header-search-box" @click="handleModal">
+            <Icon
+                style="width: 20px; height: 20px"
+                name="ep:circle-plus-filled"
+            />
+            <div>할 일 추가</div>
         </div>
     </div>
 </template>
@@ -29,8 +57,7 @@
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 24px;
-    padding: 8px;
+    height: 48px;
     position: relative;
     background-color: rgb(105, 121, 248);
 }
@@ -38,7 +65,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 4%;
+    width: 8%;
     height: 100%;
 }
 .header-logo-img {
@@ -49,29 +76,42 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 12%;
+    width: 18%;
+    height: 100%;
     font-family: "NanumBarunGothic";
+    font-weight: 600;
 }
 .header-search-box {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24%;
-    height: 100%;
+    width: 8%;
+    height: 80%;
     position: absolute;
-    right: 0;
+    right: 8%;
 }
-.header-search-box > input {
-    outline: none;
-    border-radius: 8px;
-    border-width: 1px;
-    margin-left: 8px;
+.header-search-box > div {
+    font-family: "NanumBarunGothic";
+    font-weight: 600;
+    margin-left: 12px;
+}
+.header-search-box:hover,
+.nuxt-link:hover {
+    cursor: pointer;
+    background-color: white;
+    transition: all ease-in 0.1s;
+    border-radius: 24px;
 }
 .header-search-img {
     width: 18px;
     height: 18px;
 }
 .nuxt-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36%;
+    height: 80%;
     color: black;
     text-decoration: none;
 }
