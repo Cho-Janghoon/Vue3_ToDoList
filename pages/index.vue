@@ -3,6 +3,7 @@ import { useStore } from "~/stores/store";
 const store = useStore();
 const toDoList = store.toDoList;
 const searchTodoList = store.searchTodoList;
+const deleteDoneToDoList = store.deleteDoneToDoList;
 
 const addToDoListDataState = ref<boolean>(false);
 const deleteToDoListDataState = ref<boolean>(false);
@@ -10,7 +11,11 @@ const searchKewordState = ref<boolean>(false);
 
 const changeTodoListCheck = (idx: number) => {
     toDoList[idx].check = !toDoList[idx].check;
-    store.addDoneToDoList(idx);
+    if (toDoList[idx].check === true) {
+        store.addDoneToDoList(idx);
+    } else if (toDoList[idx].check === false) {
+        store.deleteDoneToDoList(idx);
+    }
 };
 
 const searchToDo = (e) => {
@@ -19,22 +24,21 @@ const searchToDo = (e) => {
         searchKewordState.value = true;
         setTimeout(() => {
             searchKewordState.value = false;
-        }, 2000);
-    } else searchKewordState.value = false;
+        }, 3000);
+    }
 };
 
 const deleteToDo = (idx) => {
     store.deleteToDoList(idx);
 };
 
-watch(toDoList, async (newQuestion, oldQuestion) => {
-    if (toDoList.length > 10) {
+watch(toDoList, async (newToDo, prevToDo) => {
+    if (newToDo.length > 10) {
         addToDoListDataState.value = true;
         setTimeout(() => {
             addToDoListDataState.value = false;
         }, 3000);
-    } else if (toDoList.length < 10) {
-        console.log("바뀜");
+    } else if (newToDo.length < 10) {
         deleteToDoListDataState.value = true;
         setTimeout(() => {
             deleteToDoListDataState.value = false;
@@ -59,21 +63,21 @@ onMounted(() => {
     <div class="home-container-box">
         <div
             class="header-alert"
-            :class="{ modalAni: addToDoListDataState }"
+            :class="{ modalAniStart: addToDoListDataState }"
             v-if="addToDoListDataState"
         >
             <v-alert type="success">TODOLIST가 추가 되었습니다.</v-alert>
         </div>
         <div
             class="header-alert"
-            :class="{ modalAni: deleteToDoListDataState }"
+            :class="{ modalAniStart: deleteToDoListDataState }"
             v-if="deleteToDoListDataState"
         >
             <v-alert type="error">TODOLIST가 삭제 되었습니다.</v-alert>
         </div>
         <div
             class="header-alert"
-            :class="{ modalAni: searchKewordState }"
+            :class="{ modalAniStart: searchKewordState }"
             v-if="searchKewordState"
         >
             <v-alert type="warning">키워드가 존재하지 않습니다.</v-alert>
@@ -169,7 +173,7 @@ onMounted(() => {
     left: -312px;
 }
 
-.modalAni {
+.modalAniStart {
     animation: translateX 0.8s forwards;
 }
 

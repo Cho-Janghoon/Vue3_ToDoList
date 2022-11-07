@@ -33,6 +33,7 @@ const toPagesRouter = (routerInput) => {
                     margin-top: 8%;
                     font-size: 14px;
                     color: rgb(105, 121, 248);
+                    cursor: pointer;
                 "
                 @click="toPagesRouter('/current-todolist')"
             >
@@ -43,6 +44,7 @@ const toPagesRouter = (routerInput) => {
                     margin-top: 8%;
                     font-size: 14px;
                     color: rgb(105, 121, 248);
+                    cursor: pointer;
                 "
                 @click="toPagesRouter('/done-todolist')"
             >

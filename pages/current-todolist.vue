@@ -2,14 +2,14 @@
 import { useStore } from "~/stores/store";
 const store = useStore();
 const toDoList = store.toDoList;
-let doneToDoList = reactive([]);
+let currentToDOList = reactive([]);
 
 watchEffect(() => {
     console.log("watchEffect");
     const filterCheckToDo = toDoList.filter((el) => {
         return el.check === false;
     });
-    doneToDoList = [...filterCheckToDo];
+    currentToDOList = [...filterCheckToDo];
 });
 </script>
 <template>
@@ -18,7 +18,7 @@ watchEffect(() => {
             <p>Current To Do List</p>
         </div>
         <div class="home-container">
-            <div v-for="(el, idx) in doneToDoList" class="home-content-box">
+            <div v-for="(el, idx) in currentToDOList" class="home-content-box">
                 <div class="home-content-title">
                     <div style="color: rgb(105, 121, 248); margin-right: 8px">
                         {{ idx }}.

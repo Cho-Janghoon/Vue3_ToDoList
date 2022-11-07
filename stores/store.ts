@@ -26,11 +26,13 @@ export const useStore = defineStore('useStore', () => {
 
   const searchKeyword = (e: KeyboardEvent) => {
     const target = e.target as HTMLInputElement;
-    toDoList.map((el, idx) => {
-        if (searchTodoList.length === 0 && el.do.includes(target.value)) 
-            searchTodoList.push(el);
-    });
-
+      if(searchTodoList.length === 0) {
+        toDoList.map((el, idx) => {
+          if (el.do.includes(target.value)) {
+             searchTodoList.push(el);
+          } 
+      });
+    } 
 };
 
   const addToDoList = (todo) => {
@@ -45,5 +47,13 @@ export const useStore = defineStore('useStore', () => {
     doneToDoList.push(toDoList[idx])
   }
 
-  return { toDoList, searchTodoList, doneToDoList, addToDoList, deleteToDoList, searchKeyword, addDoneToDoList }
+  const deleteDoneToDoList = (checkIdx) => {
+    doneToDoList.map((el, idx) => {
+      if(el === toDoList[checkIdx]) {
+        doneToDoList.splice(idx, 1)
+      }
+    })
+  }
+
+  return { toDoList, searchTodoList, doneToDoList, addToDoList, deleteToDoList, searchKeyword, addDoneToDoList, deleteDoneToDoList }
 })
