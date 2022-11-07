@@ -3,7 +3,6 @@ import { useStore } from "~/stores/store";
 const store = useStore();
 const toDoList = store.toDoList;
 const searchTodoList = store.searchTodoList;
-const deleteDoneToDoList = store.deleteDoneToDoList;
 
 const addToDoListDataState = ref<boolean>(false);
 const deleteToDoListDataState = ref<boolean>(false);

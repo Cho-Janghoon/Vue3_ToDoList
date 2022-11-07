@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { A } from "unimport/dist/types-43c63a16";
 import { useStore } from "~/stores/store";
 const store = useStore();
 
@@ -18,12 +17,13 @@ const store = useStore();
 //     emit("openModal-setState", false);
 // };
 
+const inputValue = ref("");
+
 const {
     openModal,
     handleModal,
 }: { openModal: boolean; handleModal: () => void } = inject("open-modal");
 
-const inputValue = ref("");
 const addToDo = () => {
     if (inputValue.value.length > 0) {
         store.addToDoList(inputValue.value);
