@@ -8,22 +8,51 @@ interface TodoType {
 
 export const useStore = defineStore('useStore', () => {
 
-  const toDoList: TodoType[] = reactive([
-    { do: "read vue docs", date: "2022-10-28", check: false },
-    { do: "fanding web tour", date: "2022-10-29", check: false },
-    { do: "ready holloween costume", date: "2022-10-30", check: false },
-    { do: "read welcome docs", date: "2022-10-31", check: false },
-    { do: "weekly quest", date: "2022-11-01", check: false },
-    { do: "first project", date: "2022-11-02", check: false },
-    { do: "second project", date: "2022-11-03", check: false },
-    { do: "third project", date: "2022-11-04", check: false },
-    { do: "go trip", date: "2022-11-05", check: false },
-    { do: "study vue", date: "2022-11-06", check: false },
-  ])
+  let toDoList: TodoType[] = reactive([]);
+  let doneToDoList: TodoType[] = reactive([]);
+  const searchTodoList: TodoType[] = reactive([]);
+  const addToDoListDataState = ref<boolean>(false);
+  const deleteToDoListDataState = ref<boolean>(false);
 
-  let searchTodoList = reactive([]);
-  let doneToDoList = reactive([]);
+  /** function: 할 일 추가 */
+  const addToDoList = (todo) => {
+    toDoList.push({ do: todo, date: new Date().toISOString().slice(0, 10), check: false });
+    addToDoListDataState.value = true;
+    sessionStorage.setItem("toDoList", JSON.stringify(toDoList))
+  }
 
+  /** function: 할 일 삭제 */
+  const deleteToDoList = (idx) => {
+    doneToDoList.map((el, checkIdx) => {
+      if(el === toDoList[idx]) {
+        doneToDoList.splice(checkIdx, 1);
+      }
+    })
+    toDoList.splice(idx, 1);
+    deleteToDoListDataState.value = true;
+    sessionStorage.setItem("toDoList", JSON.stringify(toDoList))
+    sessionStorage.setItem("doneToDoList", JSON.stringify(doneToDoList));
+  }
+
+  /** function: 완료된 일 추가 */
+  const addDoneToDoList = (idx) => {
+    doneToDoList.push(toDoList[idx]); 
+    sessionStorage.setItem("toDoList", JSON.stringify(toDoList));
+    sessionStorage.setItem("doneToDoList", JSON.stringify(doneToDoList));
+  }
+
+  /** function: 완료 체크 해제 후 완료된 일에서 삭제 */
+  const deleteDoneToDoList = (checkIdx) => {
+    console.log('hello1')
+    doneToDoList.map((el, idx) => {
+      if(el === toDoList[checkIdx]) {
+        console.log('hello2')
+        doneToDoList.splice(idx, 1)
+      }
+    })
+  }
+
+  /** function: 키워드 포함 할 일 찾기 */
   const searchKeyword = (e: KeyboardEvent) => {
     const target = e.target as HTMLInputElement;
       if(searchTodoList.length === 0) {
@@ -33,27 +62,16 @@ export const useStore = defineStore('useStore', () => {
           } 
       });
     } 
-};
+  };
 
-  const addToDoList = (todo) => {
-    toDoList.push({ do: todo, date: new Date().toISOString().slice(0, 10), check: false })
-  }
+  watchEffect(() => {
+    if(typeof window !== 'undefined' && sessionStorage.getItem('toDoList') && toDoList.length === 0) {
+      toDoList = JSON.parse(sessionStorage.getItem('toDoList'))
+    }
+    if(typeof window !== 'undefined' && sessionStorage.getItem('doneToDoList') && doneToDoList.length === 0) {
+      doneToDoList = JSON.parse(sessionStorage.getItem('doneToDoList'))
+    }
+  })
 
-  const deleteToDoList = (idx) => {
-    toDoList.splice(idx, 1)
-  }
-
-  const addDoneToDoList = (idx) => {
-    doneToDoList.push(toDoList[idx])
-  }
-
-  const deleteDoneToDoList = (checkIdx) => {
-    doneToDoList.map((el, idx) => {
-      if(el === toDoList[checkIdx]) {
-        doneToDoList.splice(idx, 1)
-      }
-    })
-  }
-
-  return { toDoList, searchTodoList, doneToDoList, addToDoList, deleteToDoList, searchKeyword, addDoneToDoList, deleteDoneToDoList }
+  return { toDoList, searchTodoList, doneToDoList, addToDoListDataState, deleteToDoListDataState, addToDoList, deleteToDoList, searchKeyword, addDoneToDoList, deleteDoneToDoList }
 })

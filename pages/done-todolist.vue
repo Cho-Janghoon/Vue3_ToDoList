@@ -12,17 +12,17 @@ const doneToDoList = store.doneToDoList;
             <div v-for="(el, idx) in doneToDoList" class="home-content-box">
                 <div class="home-content-title">
                     <div style="color: rgb(105, 121, 248); margin-right: 8px">
-                        {{ idx }}.
+                        {{ idx + 1 }}.
                     </div>
                     <div style="margin-right: 8px">{{ el.do }}</div>
                     <div style="font-size: 8px">{{ el.date }}</div>
                 </div>
-                <div class="home-content-check">
+                <button class="home-content-check">
                     <img
                         class="home-content-check-img"
                         src="~/assets/images/check.png"
                     />
-                </div>
+                </button>
             </div>
         </div>
     </div>
@@ -79,9 +79,12 @@ const doneToDoList = store.doneToDoList;
 }
 .home-content-check {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: 24px;
     height: 24px;
-    text-align: center;
+    border: 0;
+    border-radius: 24px;
 }
 .home-content-check-img {
     width: 20px;

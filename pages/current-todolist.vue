@@ -5,7 +5,6 @@ const toDoList = store.toDoList;
 let currentToDOList = reactive([]);
 
 watchEffect(() => {
-    console.log("watchEffect");
     const filterCheckToDo = toDoList.filter((el) => {
         return el.check === false;
     });
@@ -21,16 +20,16 @@ watchEffect(() => {
             <div v-for="(el, idx) in currentToDOList" class="home-content-box">
                 <div class="home-content-title">
                     <div style="color: rgb(105, 121, 248); margin-right: 8px">
-                        {{ idx }}.
+                        {{ idx + 1 }}.
                     </div>
                     <div style="margin-right: 8px">{{ el.do }}</div>
                     <div style="font-size: 8px">{{ el.date }}</div>
                 </div>
-                <div class="home-content-check">
+                <button class="home-content-check">
                     <div style="cursor: pointer">
                         <Icon name="quill:checkmark" />
                     </div>
-                </div>
+                </button>
             </div>
         </div>
     </div>
@@ -87,9 +86,12 @@ watchEffect(() => {
 }
 .home-content-check {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: 24px;
     height: 24px;
-    text-align: center;
+    border: 0;
+    border-radius: 24px;
 }
 .home-content-check-img {
     width: 20px;

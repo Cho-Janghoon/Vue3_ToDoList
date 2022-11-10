@@ -28,28 +28,18 @@ const toPagesRouter = (routerInput) => {
         </div>
         <div class="footer-container-info-box__page">
             <div>For Pages</div>
-            <div
-                style="
-                    margin-top: 8%;
-                    font-size: 14px;
-                    color: rgb(105, 121, 248);
-                    cursor: pointer;
-                "
+            <button
+                class="footer-router-btn"
                 @click="toPagesRouter('/current-todolist')"
             >
                 현재 할 일
-            </div>
-            <div
-                style="
-                    margin-top: 8%;
-                    font-size: 14px;
-                    color: rgb(105, 121, 248);
-                    cursor: pointer;
-                "
+            </button>
+            <button
+                class="footer-router-btn"
                 @click="toPagesRouter('/done-todolist')"
             >
                 완료된 일
-            </div>
+            </button>
         </div>
     </div>
 </template>
@@ -68,6 +58,7 @@ const toPagesRouter = (routerInput) => {
 .footer-container-info-box {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     width: 24%;
     height: 100%;
     font-size: 12px;
@@ -78,6 +69,7 @@ const toPagesRouter = (routerInput) => {
     &__page {
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         width: 24%;
         height: 100%;
         font-size: 18px;
@@ -95,5 +87,19 @@ const toPagesRouter = (routerInput) => {
 .footer-container-logo-img {
     width: 48px;
     height: 48px;
+}
+
+.footer-router-btn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 0;
+    margin-top: 8%;
+    font-size: 14px;
+    font-family: "NanumBarunGothic";
+    font-weight: 600;
+    background-color: transparent;
+    color: rgb(105, 121, 248);
+    cursor: pointer;
 }
 </style>

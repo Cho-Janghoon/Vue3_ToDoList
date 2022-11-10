@@ -36,17 +36,17 @@ const goHome = () => {
             >
             <NuxtLink to="/done-todolist" class="nuxt-link">완료된 일</NuxtLink>
         </div>
-        <div class="header-search-box" @click="handleModal">
+        <button class="header-search-box" @click="handleModal">
             <Icon
                 style="width: 20px; height: 20px"
                 name="ep:circle-plus-filled"
             />
             <div>할 일 추가</div>
-        </div>
+        </button>
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 @font-face {
     font-family: "NanumBarunGothic";
     src: url("../assets/fonts/NanumBarunGothic.ttf") format("truetype");
@@ -89,6 +89,8 @@ const goHome = () => {
     height: 80%;
     position: absolute;
     right: 8%;
+    border: 0;
+    background-color: transparent;
 }
 .header-search-box > div {
     font-family: "NanumBarunGothic";

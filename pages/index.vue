@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useStore } from "~/stores/store";
 const store = useStore();
-const toDoList = store.toDoList;
-const searchTodoList = store.searchTodoList;
+const toDoList = reactive(store.toDoList);
+const searchTodoList = reactive(store.searchTodoList);
+const addToDoListDataState = ref(false);
+const deleteToDoListDataState = ref(false);
 
-const addToDoListDataState = ref<boolean>(false);
-const deleteToDoListDataState = ref<boolean>(false);
 const searchKewordState = ref<boolean>(false);
 
 const changeTodoListCheck = (idx: number) => {
@@ -27,57 +27,65 @@ const searchToDo = (e) => {
     }
 };
 
+watchEffect(() => {
+    if (store.addToDoListDataState) {
+        addToDoListDataState.value = true;
+        store.addToDoListDataState = false;
+        setTimeout(() => {
+            addToDoListDataState.value = false;
+        }, 3000);
+    }
+    if (store.deleteToDoListDataState) {
+        deleteToDoListDataState.value = true;
+        store.deleteToDoListDataState = false;
+        setTimeout(() => {
+            deleteToDoListDataState.value = false;
+        }, 2000);
+    }
+});
+
 const deleteToDo = (idx) => {
     store.deleteToDoList(idx);
 };
 
-watch(toDoList, async (newToDo, prevToDo) => {
-    if (newToDo.length > 10) {
-        addToDoListDataState.value = true;
-        setTimeout(() => {
-            addToDoListDataState.value = false;
-        }, 3000);
-    } else if (newToDo.length < 10) {
-        deleteToDoListDataState.value = true;
-        setTimeout(() => {
-            deleteToDoListDataState.value = false;
-        }, 3000);
-    }
-});
+// onUnmounted(() => {
+//     console.log("unmounted");
+// });
 
-onUpdated(() => {
-    console.log("updated");
-});
+// onBeforeMount(() => {
+//     console.log("berforemount");
+// });
 
-onUnmounted(() => {
-    console.log("unmounted");
-});
+// onMounted(() => {
+//     console.log("mounted");
+//     console.log(addToDoListDataState);
+// });
 
-onMounted(() => {
-    console.log("mounted");
-});
+// onUpdated(() => {
+//     console.log("updated");
+// });
 </script>
 
 <template>
     <div class="home-container-box">
         <div
+            v-if="addToDoListDataState"
             class="header-alert"
             :class="{ modalAniStart: addToDoListDataState }"
-            v-if="addToDoListDataState"
         >
             <v-alert type="success">TODOLIST가 추가 되었습니다.</v-alert>
         </div>
         <div
+            v-if="deleteToDoListDataState"
             class="header-alert"
             :class="{ modalAniStart: deleteToDoListDataState }"
-            v-if="deleteToDoListDataState"
         >
             <v-alert type="error">TODOLIST가 삭제 되었습니다.</v-alert>
         </div>
         <div
+            v-if="searchKewordState"
             class="header-alert"
             :class="{ modalAniStart: searchKewordState }"
-            v-if="searchKewordState"
         >
             <v-alert type="warning">키워드가 존재하지 않습니다.</v-alert>
         </div>
@@ -93,41 +101,41 @@ onMounted(() => {
                 />
             </div>
         </div>
-        <div class="home-container">
+        <ul class="home-container">
             <template v-if="searchTodoList.length === 0">
-                <div v-for="(el, idx) in toDoList" class="home-content-box">
+                <li v-for="(el, idx) in toDoList" class="home-content-box">
                     <div class="home-content-title">
                         <div
                             style="color: rgb(105, 121, 248); margin-right: 8px"
                         >
-                            {{ idx }}.
+                            {{ idx + 1 }}.
                         </div>
+
                         <div style="margin-right: 8px">{{ el.do }}</div>
                         <div style="font-size: 8px">{{ el.date }}</div>
-                        <div
-                            style="cursor: pointer; margin-left: 12px"
-                            @click="deleteToDo(idx)"
+                    </div>
+                    <div class="home-content-button-box">
+                        <button
+                            class="home-content-check"
+                            @click="changeTodoListCheck(idx)"
                         >
+                            <img
+                                v-if="toDoList[idx].check"
+                                class="home-content-check-img"
+                                src="~/assets/images/check.png"
+                            />
+                            <div style="cursor: pointer" v-else>
+                                <Icon name="quill:checkmark" />
+                            </div>
+                        </button>
+                        <div style="cursor: pointer" @click="deleteToDo(idx)">
                             <Icon name="ep:delete" />
                         </div>
                     </div>
-                    <div
-                        class="home-content-check"
-                        @click="changeTodoListCheck(idx)"
-                    >
-                        <img
-                            v-if="toDoList[idx].check"
-                            class="home-content-check-img"
-                            src="~/assets/images/check.png"
-                        />
-                        <div style="cursor: pointer" v-else>
-                            <Icon name="quill:checkmark" />
-                        </div>
-                    </div>
-                </div>
+                </li>
             </template>
             <template v-else-if="searchTodoList.length > 0">
-                <div
+                <li
                     v-for="(el, idx) in searchTodoList"
                     class="home-content-box"
                 >
@@ -139,7 +147,7 @@ onMounted(() => {
                         </div>
                         <div>{{ el.do }}</div>
                     </div>
-                    <div
+                    <button
                         class="home-content-check"
                         @click="changeTodoListCheck(idx)"
                     >
@@ -151,10 +159,10 @@ onMounted(() => {
                         <div style="cursor: pointer" v-else>
                             <Icon name="quill:checkmark" />
                         </div>
-                    </div>
-                </div>
+                    </button>
+                </li>
             </template>
-        </div>
+        </ul>
     </div>
 </template>
 
@@ -173,7 +181,7 @@ onMounted(() => {
 }
 
 .modalAniStart {
-    animation: translateX 0.8s forwards;
+    animation: translateX 0.6s forwards;
 }
 
 @keyframes translateX {
@@ -229,6 +237,7 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     padding-top: 4%;
+    margin: 0;
 }
 .home-content-box {
     display: flex;
@@ -252,9 +261,19 @@ onMounted(() => {
 }
 .home-content-check {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: 24px;
     height: 24px;
-    text-align: center;
+    border: 0;
+    border-radius: 24px;
+}
+
+.home-content-button-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 6%;
 }
 .home-content-check-img {
     width: 20px;

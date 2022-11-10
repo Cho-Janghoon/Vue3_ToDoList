@@ -29,10 +29,11 @@ const addToDo = () => {
         store.addToDoList(inputValue.value);
         handleModal();
     }
+    inputValue.value = "";
 };
 </script>
 <template>
-    <div class="modal-container" v-if="openModal === true">
+    <div class="modal-container" v-if="openModal">
         <div class="modal-overlay" @click="handleModal"></div>
         <div class="modal-content">
             <div>ADD TO DO</div>
@@ -43,12 +44,11 @@ const addToDo = () => {
                         onfocus="this.placeholder = ''"
                         v-model="inputValue"
                         placeholder="할 일을 입력해주세요:)"
+                        @keyup.enter="addToDo"
                     />
                 </div>
             </div>
-            <div style="font-size: 28px; cursor: pointer" @click="addToDo">
-                추가하기
-            </div>
+            <button class="modal-add-btn" @click="addToDo">추가하기</button>
         </div>
     </div>
 </template>
@@ -119,5 +119,16 @@ const addToDo = () => {
     border-radius: 32px;
     width: 58%;
     height: 32px;
+}
+
+.modal-add-btn {
+    border: 0;
+    background-color: transparent;
+    font-family: "NanumBarunGothic";
+    font-weight: 800;
+    font-size: 28px;
+    color: rgb(105, 121, 248);
+    font-size: 28px;
+    cursor: pointer;
 }
 </style>
