@@ -2,12 +2,12 @@
 import { useStore } from "~/stores/store";
 const store = useStore();
 
-// const props = defineProps({
+// const props = defineProps<{
 //     openModal: {
 //         type: Boolean,
 //         default: true,
 //     },
-// });
+// }>();
 
 // const emit = defineEmits<{
 //     (e: "openModal-setState", openModal: boolean): void;
@@ -22,7 +22,7 @@ const inputValue = ref("");
 const {
     openModal,
     handleModal,
-}: { openModal: boolean; handleModal: () => void } = inject("open-modal");
+}: { openModal: Boolean; handleModal: () => void } = inject("open-modal");
 
 const addToDo = () => {
     if (inputValue.value.length > 0) {
@@ -33,24 +33,31 @@ const addToDo = () => {
 };
 </script>
 <template>
-    <div class="modal-container" v-if="openModal">
-        <div class="modal-overlay" @click="handleModal"></div>
-        <div class="modal-content">
-            <div>ADD TO DO</div>
-            <div class="modal-content-add">
-                <div class="modal-content-contents">
-                    <input
-                        type="text"
-                        onfocus="this.placeholder = ''"
-                        v-model="inputValue"
-                        placeholder="할 일을 입력해주세요:)"
-                        @keyup.enter="addToDo"
-                    />
+    <template v-if="openModal">
+        <div
+            class="modal-container"
+            :class="{
+                fadeInModal: openModal === true,
+            }"
+        >
+            <div class="modal-overlay" @click="handleModal"></div>
+            <div class="modal-content">
+                <div>ADD TO DO</div>
+                <div class="modal-content-add">
+                    <div class="modal-content-contents">
+                        <input
+                            type="text"
+                            onfocus="this.placeholder = ''"
+                            v-model="inputValue"
+                            placeholder="할 일을 입력해주세요:)"
+                            @keyup.enter="addToDo"
+                        />
+                    </div>
                 </div>
+                <button class="modal-add-btn" @click="addToDo">추가하기</button>
             </div>
-            <button class="modal-add-btn" @click="addToDo">추가하기</button>
         </div>
-    </div>
+    </template>
 </template>
 <style scoped>
 .modal-container,
@@ -82,18 +89,41 @@ const addToDo = () => {
     border: 3px solid rgb(105, 121, 248);
     z-index: 1;
     opacity: 1;
-    font-family: "NanumBarunGothic";
-    font-weight: 800;
     font-size: 28px;
     color: rgb(105, 121, 248);
 }
+
+.fadeInModal {
+    animation: fadein 0.5s;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeOutModal {
+    animation: fadeout 0.8s;
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 .modal-content-add {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    font-family: "NanumBarunGothic";
-    font-weight: 600;
     font-size: 16px;
     color: rgb(105, 121, 248);
 }
@@ -125,7 +155,7 @@ const addToDo = () => {
     border: 0;
     background-color: transparent;
     font-family: "NanumBarunGothic";
-    font-weight: 800;
+    font-weight: 600;
     font-size: 28px;
     color: rgb(105, 121, 248);
     font-size: 28px;

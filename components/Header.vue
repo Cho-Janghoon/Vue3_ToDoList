@@ -1,19 +1,19 @@
 <script lang="ts" setup>
+const router = useRouter();
 const openModal = ref<boolean>(false);
+
 const handleModal = (): void => {
     openModal.value = !openModal.value;
 };
-
-provide("open-modal", { openModal, handleModal });
-
-const router = useRouter();
 const goHome = () => {
     router.push({ path: "/" });
 };
+
+provide("open-modal", { openModal, handleModal });
 </script>
 
 <template>
-    <Modal />
+    <modal />
     <div class="header-container">
         <div class="header-logo-box">
             <div
@@ -49,7 +49,7 @@ const goHome = () => {
 <style lang="scss" scoped>
 @font-face {
     font-family: "NanumBarunGothic";
-    src: url("../assets/fonts/NanumBarunGothic.ttf") format("truetype");
+    src: url("~/assets/fonts/NanumBarunGothic.ttf") format("truetype");
     font-weight: 400;
 }
 .header-container {

@@ -1,19 +1,21 @@
 <script lang="ts" setup>
 import { useStore } from "~/stores/store";
 const store = useStore();
-const toDoList = reactive(store.toDoList);
-const searchTodoList = reactive(store.searchTodoList);
-const addToDoListDataState = ref(false);
-const deleteToDoListDataState = ref(false);
-
+const toDoList = store.toDoList;
+const searchTodoList = store.searchTodoList;
 const searchKewordState = ref<boolean>(false);
+const addToDoListDataState = ref<boolean>(false);
+const deleteToDoListDataState = ref<boolean>(false);
 
 const changeTodoListCheck = (idx: number) => {
     toDoList[idx].check = !toDoList[idx].check;
-    if (toDoList[idx].check === true) {
-        store.addDoneToDoList(idx);
-    } else if (toDoList[idx].check === false) {
-        store.deleteDoneToDoList(idx);
+    switch (toDoList[idx].check) {
+        case true:
+            store.addDoneToDoList(idx);
+            break;
+        case false:
+            store.deleteDoneToDoList(idx);
+            break;
     }
 };
 
@@ -22,6 +24,8 @@ const searchToDo = (e) => {
     if (searchTodoList.length === 0) {
         searchKewordState.value = true;
         setTimeout(() => {
+            (document.getElementById("searchId") as HTMLInputElement).value =
+                null;
             searchKewordState.value = false;
         }, 3000);
     }
@@ -98,10 +102,18 @@ const deleteToDo = (idx) => {
                     onfocus="this.placeholder = ''"
                     @keyup.enter="searchToDo"
                     placeholder="키워드를 입력해주세요:)"
+                    id="searchId"
                 />
             </div>
         </div>
         <ul class="home-container">
+            <template v-if="toDoList.length === 0">
+                <skeleton />
+                <skeleton />
+                <skeleton />
+                <skeleton />
+                <skeleton />
+            </template>
             <template v-if="searchTodoList.length === 0">
                 <li v-for="(el, idx) in toDoList" class="home-content-box">
                     <div class="home-content-title">
@@ -172,8 +184,6 @@ const deleteToDo = (idx) => {
     justify-content: center;
     align-items: center;
     width: 312px;
-    font-family: "NanumBarunGothic";
-    font-weight: 600;
     font-size: 14px;
     position: absolute;
     top: 4%;
@@ -206,7 +216,6 @@ const deleteToDo = (idx) => {
     width: 100%;
     height: 148px;
     font-size: 48px;
-    font-family: "NanumBarunGothic";
     font-weight: 600;
     color: rgb(105, 121, 248);
     padding-top: 2%;
@@ -237,6 +246,7 @@ const deleteToDo = (idx) => {
     width: 100%;
     height: 100%;
     padding-top: 4%;
+    padding-left: 0;
     margin: 0;
 }
 .home-content-box {

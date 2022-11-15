@@ -44,6 +44,11 @@ const toPagesRouter = (routerInput) => {
     </div>
 </template>
 <style lang="scss" scoped>
+@font-face {
+    font-family: "NanumBarunGothic";
+    src: url("~/assets/fonts/NanumBarunGothic.ttf") format("truetype");
+    font-weight: 400;
+}
 .footer-container {
     display: flex;
     justify-content: space-around;
@@ -62,8 +67,6 @@ const toPagesRouter = (routerInput) => {
     width: 24%;
     height: 100%;
     font-size: 12px;
-    font-family: "NanumBarunGothic";
-    font-weight: 600;
     padding-top: 2%;
 
     &__page {

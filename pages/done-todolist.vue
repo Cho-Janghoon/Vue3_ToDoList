@@ -9,21 +9,32 @@ const doneToDoList = store.doneToDoList;
             <p>Done To Do List</p>
         </div>
         <div class="home-container">
-            <div v-for="(el, idx) in doneToDoList" class="home-content-box">
-                <div class="home-content-title">
-                    <div style="color: rgb(105, 121, 248); margin-right: 8px">
-                        {{ idx + 1 }}.
+            <template v-if="doneToDoList.length === 0">
+                <skeleton />
+                <skeleton />
+                <skeleton />
+                <skeleton />
+                <skeleton />
+            </template>
+            <template v-if="doneToDoList.length > 0">
+                <div v-for="(el, idx) in doneToDoList" class="home-content-box">
+                    <div class="home-content-title">
+                        <div
+                            style="color: rgb(105, 121, 248); margin-right: 8px"
+                        >
+                            {{ idx + 1 }}.
+                        </div>
+                        <div style="margin-right: 8px">{{ el.do }}</div>
+                        <div style="font-size: 8px">{{ el.date }}</div>
                     </div>
-                    <div style="margin-right: 8px">{{ el.do }}</div>
-                    <div style="font-size: 8px">{{ el.date }}</div>
+                    <button class="home-content-check">
+                        <img
+                            class="home-content-check-img"
+                            src="~/assets/images/check.png"
+                        />
+                    </button>
                 </div>
-                <button class="home-content-check">
-                    <img
-                        class="home-content-check-img"
-                        src="~/assets/images/check.png"
-                    />
-                </button>
-            </div>
+            </template>
         </div>
     </div>
 </template>
@@ -42,8 +53,6 @@ const doneToDoList = store.doneToDoList;
     width: 100%;
     height: 148px;
     font-size: 48px;
-    font-family: "NanumBarunGothic";
-    font-weight: 600;
     color: rgb(105, 121, 248);
     padding-top: 2%;
 }
@@ -64,8 +73,6 @@ const doneToDoList = store.doneToDoList;
     width: 50%;
     height: 24px;
     padding: 12px;
-    font-family: "NanumBarunGothic";
-    font-weight: 600;
 }
 .home-content-box:hover {
     background-color: rgb(165, 165, 165, 0.2);
