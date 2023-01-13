@@ -5,56 +5,54 @@ const toPagesRouter = (routerInput) => {
 };
 </script>
 <template>
-    <div class="footer-container">
-        <div class="footer-container-info-box">
-            <img
-                class="footer-container-logo-img"
-                src="~/assets/images/fanding_logo.png"
-            />
-            <div class="footer-container-info">
-                <div>
-                    <p>EMAIL: ant@fanding.kr</p>
-                    <p>ADDRESS: 서울시 강남구 선릉로92길 36 3-4층</p>
-                    <p>
-                        3-4F, 36, Seolleung-ro 92-gil, Gangnam-gu, Seoul,
-                        Republic of Korea
-                    </p>
-                </div>
-                <div>
-                    <p>(주)팬딩 / 대표이사: 앤트</p>
-                    <p>사업자등록번호: 111-11-11111</p>
+    <div>
+        <div class="footer-container">
+            <div class="footer-container-info-box">
+                <img
+                    class="footer-container-logo-img"
+                    src="~/assets/images/fanding_logo.png"
+                />
+                <div class="footer-container-info">
+                    <div>
+                        <p>EMAIL: ant@fanding.kr</p>
+                        <p>ADDRESS: 서울시 강남구 선릉로92길 36 3-4층</p>
+                        <p>
+                            3-4F, 36, Seolleung-ro 92-gil, Gangnam-gu, Seoul,
+                            Republic of Korea
+                        </p>
+                    </div>
+                    <div>
+                        <p>(주)팬딩 / 대표이사: 앤트</p>
+                        <p>사업자등록번호: 111-11-11111</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="footer-container-info-box__page">
-            <div>For Pages</div>
-            <button
-                class="footer-router-btn"
-                @click="toPagesRouter('/current-todolist')"
-            >
-                현재 할 일
-            </button>
-            <button
-                class="footer-router-btn"
-                @click="toPagesRouter('/done-todolist')"
-            >
-                완료된 일
-            </button>
+            <div class="footer-container-info-box__page">
+                <div>For Pages</div>
+                <button
+                    class="footer-router-btn"
+                    @click="toPagesRouter('/current-todolist')"
+                >
+                    현재 할 일
+                </button>
+                <button
+                    class="footer-router-btn"
+                    @click="toPagesRouter('/done-todolist')"
+                >
+                    완료된 일
+                </button>
+            </div>
         </div>
     </div>
 </template>
 <style lang="scss" scoped>
-@font-face {
-    font-family: "NanumBarunGothic";
-    src: url("~/assets/fonts/NanumBarunGothic.ttf") format("truetype");
-    font-weight: 400;
-}
+@import "~/assets/styles/mixin.scss";
+
 .footer-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    height: 294px;
     background-color: rgb(245, 245, 245);
     position: absolute;
     bottom: 0;

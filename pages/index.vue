@@ -51,23 +51,6 @@ watchEffect(() => {
 const deleteToDo = (idx) => {
     store.deleteToDoList(idx);
 };
-
-// onUnmounted(() => {
-//     console.log("unmounted");
-// });
-
-// onBeforeMount(() => {
-//     console.log("berforemount");
-// });
-
-// onMounted(() => {
-//     console.log("mounted");
-//     console.log(addToDoListDataState);
-// });
-
-// onUpdated(() => {
-//     console.log("updated");
-// });
 </script>
 
 <template>
@@ -179,6 +162,8 @@ const deleteToDo = (idx) => {
 </template>
 
 <style scoped lang="scss">
+@import "~/assets/styles/mixin.scss";
+
 .header-alert {
     display: flex;
     justify-content: center;
@@ -207,6 +192,12 @@ const deleteToDo = (idx) => {
     width: 100%;
     height: 100%;
     padding-bottom: 4%;
+
+    @include mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
 }
 .home-container-title {
     display: flex;
